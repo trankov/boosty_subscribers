@@ -94,7 +94,13 @@ class SubscriberList:
         Выбирает подписчиков по указанной цене подписки
         """
         return (
-            [sub for sub in self.active_subscribers if sub.price == price]
+            [
+                sub
+                for sub in reversed(
+                    sorted(self.active_subscribers, key=lambda sub: sub.total_money)
+                )
+                if sub.price == price
+            ]
             if price in self.prices
             else []
         )
@@ -115,6 +121,7 @@ class SubscriberList:
             headline = f"Подписчики за {price} руб.:"
             hr = "—" * len(headline)
             report_text += "\n".join((hr, headline, hr))
+            report_text += "\n"
             pricelist = self.select_price(price)
             report_text += "\n".join(sub.name for sub in pricelist)
             report_text += "\n"
@@ -161,7 +168,7 @@ class CSVManager:
         self.__close_csv_stream()
 
     def __close_csv_stream(self) -> None:
-        if not self.csv_stream.closed:
+        if self.csv_stream and not self.csv_stream.closed:
             self.csv_stream.close()
 
     def _get_api_responce(self) -> None:
