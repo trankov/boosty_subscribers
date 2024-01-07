@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Получить список донатеров</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script defer type="text/javascript" src="/eel.js"></script>
+    <script defer type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+<h1 id="lblHeader">Получить список донатеров</h1>
+<div id="frameSourcePanel">
+    <input type="button" id="btnFetch" value="Из интернета">
+    <input type="button" id="btnFile" value="Из файла">
+</div>
+<div id="frameResultPanel">
+    <div id="spinnerFetch" style="display: none;">
+        <img src="img/spinner.gif" id="imgSpinner">
+    </div>
+    <div id="lblResult"></div>
+</div>
+</body>
+</html>
