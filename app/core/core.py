@@ -3,8 +3,6 @@ from dataclasses import dataclass, field
 from datetime import date
 from io import StringIO, TextIOWrapper
 
-import requests
-
 
 @dataclass
 class Subscriber:
@@ -145,25 +143,16 @@ class SubscriberList:
 
 class CSVManager:
     """
-    Если указано имя файла, выполняет загрузку CSV из него, иначе
-    использует API Boosty. Формирует `SubscriberList` и помещает его
+    Выполняет загрузку из CSV. Формирует `SubscriberList` и помещает его
     в атрибут `table`.
     """
 
     csv_stream: TextIOWrapper
     table: SubscriberList
 
-    def __init__(self, filename: str | None = None) -> None:
-        if filename:
-            self._init_csv_stream_from_file(filename)
-        else:
-            self._init_csv_stream_from_api()
+    def __init__(self, filename) -> None:
+        self._init_csv_stream_from_file(filename)
         self.table = self._get_csv_table_from_stream(self.csv_stream)
-        # self.__close_csv_stream()
-
-    def _init_csv_stream_from_api(self) -> None:
-        response = self._get_api_responce()
-        self.csv_stream = self._get_io_stream(response.content)
 
     def _init_csv_stream_from_file(self, path: str) -> None:
         self.csv_stream = open(path, "r", encoding="utf-8-sig")
@@ -175,11 +164,11 @@ class CSVManager:
         if not self.csv_stream.closed:
             self.csv_stream.close()
 
-    def _get_api_responce(self) -> requests.Response:
+    def _get_api_responce(self) -> None:
         """
         Получает сырой CSV из API Boosty
         """
-        return requests.get("", headers={})
+        return None
 
     def _get_io_stream(self, content: bytes) -> StringIO:
         """
@@ -198,6 +187,6 @@ class CSVManager:
             return SubscriberList([Subscriber(**row) for row in reader])
 
 
-if __name__ == "__main__":
-    stat: SubscriberList = CSVManager().table
-    stat.report()
+# if __name__ == "__main__":
+#     stat: SubscriberList = CSVManager().table
+#     stat.report()
